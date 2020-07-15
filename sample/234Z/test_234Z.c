@@ -134,6 +134,8 @@ int main( int argc, char* argv[] )
 		exit ( EXIT_FAILURE );
 	}
 
+	pixel_ID = ID_RGBA32;
+
 	//=====================================
 	// Execute 234Compositor
 	//=====================================
