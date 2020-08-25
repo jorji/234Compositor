@@ -243,6 +243,8 @@ int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
 		if (( nnodes != 3 ) && ( my_rank == ROOT_NODE )) {
 			memcpy ( my_image, temp_image_byte_ptr, width * height * global_image_type * sizeof(BYTE) );
 		}
+
+		free ( depth_list );
 	}
 	else if (( pixel_ID == ID_RGBAZ64 ) && ( merge_ID == DEPTH )) 
 	{
@@ -303,6 +305,8 @@ int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
 				}
 			}
 		}
+
+		free ( rgbaz64_img );
 
 	}
 	else if (( pixel_ID == ID_RGBA128 ) && ( merge_ID == ALPHA )) 
@@ -379,6 +383,8 @@ int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
 			memcpy ( my_image, temp_image_rgba128, width * height * global_image_type * sizeof(float) );
 		}
 
+		free( depth_list );
+
 	}
 	else if (( pixel_ID == ID_RGBAZ160 ) && ( merge_ID == DEPTH )) {
 
@@ -425,6 +431,8 @@ int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
 				}
 			}
 		}
+
+		free (rgbaz160_img );
 	}
 	else 
 	{
