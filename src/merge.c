@@ -29,12 +29,9 @@
 /*========================================================*/
 /**
  *  @brief Alpha-blend compositing (RGBA32 Pixels)
- *         Back-to-Front Order
  * 
- *  Consider Pre-multiplied (Weighted) images
- *
- *  @param  over_image  [in] Image to be alpha blended
  *  @param  under_image [in] Image to be alpha blended
+ *  @param  over_image  [in] Image to be alpha blended
  *  @param  blend_image [in] Image to be alpha blended
  *  @param  image_size  [in] Image size
 */
@@ -42,14 +39,14 @@
 
 #ifdef C99
  int composite_alpha_rgba32 \
-	( BYTE* restrict over_image, \
-	  BYTE* restrict under_image, \
+	( BYTE* restrict under_image, \
+	  BYTE* restrict over_image, \
 	  BYTE* restrict blend_image, \
 	  unsigned int  image_size )
 #else
  int composite_alpha_rgba32 \
-	( BYTE* over_image, \
-	  BYTE* under_image, \
+	( BYTE* under_image, \
+	  BYTE* over_image, \
 	  BYTE* blend_image, \
 	  unsigned int  image_size )
 #endif
@@ -76,6 +73,7 @@
 	BYTE blend_a;
 
 	float one_minus_alpha;
+	float one_alpha;
 
 	blend_image_ptr = (BYTE *)blend_image;
 
@@ -86,7 +84,7 @@
 
 	#if defined ( _OPENMP ) 
 		#pragma omp parallel for \
-			private( i, one_minus_alpha, \
+			private( i, one_minus_alpha, one_alpha \
 				 over_r,  over_g,  over_b,  over_a,   \
 				 under_r, under_g, under_b, under_a,  \
 				 blend_r, blend_g, blend_b, blend_a ) 
@@ -94,7 +92,7 @@
 
 	for ( i = 0; i < full_image_size; i += RGBA ) // SKIP 4 elements
 	{
-		over_a = (BYTE)over_image[ i + 3 ];
+		over_a  = (BYTE)over_image[ i + 3 ];
 		under_a = (BYTE)under_image[ i + 3 ];
 
 		if ( over_a == 0 ) {
@@ -123,15 +121,22 @@
 			under_g = (BYTE)under_image[ i + 1 ];
 			under_b = (BYTE)under_image[ i + 2 ];
 	
-			// Pre-calculate 1 - Src_A
+			// =======================================================
+			one_alpha       = (float)( over_a  / 255.0f );
 			one_minus_alpha = (float)( 1.0f - ( over_a  / 255.0f ));
+									
+			blend_r = saturate_add((BYTE)( over_r * one_alpha ), (BYTE)( under_r * one_minus_alpha ));
+			blend_g = saturate_add((BYTE)( over_g * one_alpha ), (BYTE)( under_g * one_minus_alpha ));
+			blend_b = saturate_add((BYTE)( over_b * one_alpha ), (BYTE)( under_b * one_minus_alpha ));
+			blend_a = saturate_add((BYTE)( over_a * one_alpha ), (BYTE)( under_a * one_minus_alpha ));
 
 			// =======================================================
-			blend_a = saturate_add( over_a, (BYTE)( under_a * one_minus_alpha ));
-
-			blend_r = saturate_add( over_r, (BYTE)( under_r * one_minus_alpha ));
-			blend_g = saturate_add( over_g, (BYTE)( under_g * one_minus_alpha ));
-			blend_b = saturate_add( over_b, (BYTE)( under_b * one_minus_alpha ));
+			// one_minus_alpha = (float)( 1.0f - ( over_a  / 255.0f ));
+			
+			// blend_r = saturate_add((BYTE)( over_r ), (BYTE)( under_r * one_minus_alpha ));
+			// blend_g = saturate_add((BYTE)( over_g ), (BYTE)( under_g * one_minus_alpha ));
+			// blend_b = saturate_add((BYTE)( over_b ), (BYTE)( under_b * one_minus_alpha ));
+			// blend_a = saturate_add((BYTE)( over_a ), (BYTE)( under_a * one_minus_alpha ));
 			// =======================================================
 		}	
 		
@@ -1428,7 +1433,7 @@ void Create_AlphaBlend_LUT ( void )
 	unsigned int Alpha;
 	unsigned int Color;
 	unsigned int Saturation;
-	unsigned int Color_Val;
+	unsigned int Color_Val1, Color_Val2;
 
 	unsigned int Alpha_Div_256;
 	unsigned int Alpha_Sub_255;
@@ -1441,8 +1446,10 @@ void Create_AlphaBlend_LUT ( void )
 
 		for ( Color = 0; Color < 256; Color++ ) 
 		{
-			Color_Val =  (unsigned int)(( Alpha_Sub_255 * Color ) + 0x80 ) >> 8;
-			LUT_Mult[ Alpha_Div_256 | Color ] = ( BYTE )Color_Val;
+			Color_Val1 =  (unsigned int)(( Alpha_Sub_255 * Color ) + 0x80 ) >> 8;
+			Color_Val2 =  (unsigned int)(( Alpha * Color ) + 0x80 ) >> 8;
+			LUT_Mult1[ Alpha_Div_256 | Color ] = ( BYTE )Color_Val1;
+			LUT_Mult2[ Alpha_Div_256 | Color ] = ( BYTE )Color_Val2;
 		}
 	}
 
@@ -1457,23 +1464,22 @@ void Create_AlphaBlend_LUT ( void )
 /**
  *  @brief Alpha-blend compositing. 
  *
- *  @param  order      [in] OVER or UNDER
- *  @param  othr_image [in] Image to be alpha blended
- *  @param  recv_image [in] Image to be alpha blended
- *  @param  image_size [in] Image size
- *  @param  blnd_image [out] Alpha blended image
+ *  @param  under_image [in] Image to be alpha blended
+ *  @param  over_image  [in] Image to be alpha blended
+ *  @param  blend_image [in] Image to be alpha blended
+ *  @param  image_size  [in] Image size
  */
 /*===========================================================================*/
 #ifdef C99
  int composite_alpha_rgba32_LUT \
-	( BYTE* restrict over_image, \
-	  BYTE* restrict under_image, \
+	( BYTE* restrict under_image, \
+	  BYTE* restrict over_image, \
 	  BYTE* restrict blend_image, \
 	  unsigned int  image_size )
 #else
  int composite_alpha_rgba32_LUT \
-	( BYTE* over_image, \
-	  BYTE* under_image, \
+	( BYTE* under_image, \
+	  BYTE* over_image, \
 	  BYTE* blend_image, \
 	  unsigned int  image_size )
 #endif
@@ -1531,20 +1537,37 @@ void Create_AlphaBlend_LUT ( void )
 
 		Alpha_Div_256 = ((unsigned int)over_a) << 8;
 
-		// Calculate RGBA component values
+		// =======================================================
+		blend_r = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult1[ \
+		                                      Alpha_Div_256 | ((unsigned int)under_r  ) ] ) \
+		                                      + ((unsigned int)LUT_Mult2[ Alpha_Div_256 | (unsigned int) over_r ]) ];
+		blend_g = (BYTE)LUT_Sat[  ((unsigned int)LUT_Mult1[ \
+							Alpha_Div_256 | ((unsigned int)under_g) ] ) \
+							+ ((unsigned int)LUT_Mult2[ Alpha_Div_256 | (unsigned int) over_g ]) ];
+		blend_b = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult1[ \
+							Alpha_Div_256 | ((unsigned int)under_b ) ] ) \
+							+ ((unsigned int)LUT_Mult2[ Alpha_Div_256 | (unsigned int) over_b ]) ];
+		blend_a = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult1[ \
+							Alpha_Div_256 | ((unsigned int)under_a) ] ) \
+							+ ((unsigned int)LUT_Mult2[ Alpha_Div_256 | (unsigned int) over_a ]) ];
+
+		// =======================================================
+/*
 		blend_r = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult[ \
 							Alpha_Div_256 | ((unsigned int)under_r  ) ] ) \
-							+ ((unsigned int)over_r  ) ];
+							+ ((unsigned int)over_r ) ];
 		blend_g = (BYTE)LUT_Sat[  ((unsigned int)LUT_Mult[ \
 							Alpha_Div_256 | ((unsigned int)under_g) ] ) \
-							+ ((unsigned int)over_g) ];
+							+ ((unsigned int)over_g ) ];
 		blend_b = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult[ \
 							Alpha_Div_256 | ((unsigned int)under_b ) ] ) \
 							+ ((unsigned int)over_b ) ];
 		blend_a = (BYTE)LUT_Sat[ ((unsigned int)LUT_Mult[ \
 							Alpha_Div_256 | ((unsigned int)under_a) ] ) \
-							+ ((unsigned int)over_a) ];
-
+							+ ((unsigned int)over_a ) ];
+*/
+		// =======================================================
+							
 		blend_image_ptr[ i     ] = (BYTE)( blend_r ); 
 		blend_image_ptr[ i + 1 ] = (BYTE)( blend_g ); 
 		blend_image_ptr[ i + 2 ] = (BYTE)( blend_b ); 
@@ -1553,5 +1576,4 @@ void Create_AlphaBlend_LUT ( void )
 	
 	return EXIT_SUCCESS;
 }
-
 

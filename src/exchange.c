@@ -1249,11 +1249,11 @@ int bswap_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 			if ( image_ID == ID_RGBA32 ) 
 			{
 				#ifdef _LUTBLEND
-					composite_alpha_rgba32 ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32_LUT ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#elif defined _BLENDF
 					composite_alpha_rgba32f ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#else
-					composite_alpha_rgba32_LUT ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32 ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#endif
 			}
 			else if ( image_ID == ID_RGBA56 ) 
@@ -1341,11 +1341,11 @@ int bswap_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 			if ( image_ID == ID_RGBA32 ) 
 			{
 				#ifdef _LUTBLEND
-					composite_alpha_rgba32 ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#elif defined _BLENDF
 					composite_alpha_rgba32f ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#else
-					composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32 ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#endif
 			}
 			else if ( image_ID == ID_RGBA56 ) 
@@ -2223,11 +2223,11 @@ int stage2_bswap_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 			if ( image_ID == ID_RGBA32 ) 
 			{
 				#ifdef _LUTBLEND
-					composite_alpha_rgba32 ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32_LUT ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#elif defined _BLENDF
 					composite_alpha_rgba32f ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#else
-					composite_alpha_rgba32_LUT ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32 ( bs_pair_image_ptr, bs_recv_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#endif
 			}
 			else if ( image_ID == ID_RGBA56 ) 
@@ -2296,11 +2296,11 @@ int stage2_bswap_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 			if ( image_ID == ID_RGBA32 ) 
 			{
 				#ifdef _LUTBLEND
-					composite_alpha_rgba32 ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#elif defined _BLENDF
 					composite_alpha_rgba32f ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#else
-					composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+					composite_alpha_rgba32 ( bs_recv_image_ptr, bs_pair_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 				#endif
 
 			}
@@ -2423,11 +2423,11 @@ int partial_bswap2_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( my_image, temp_image, my_image, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2481,11 +2481,11 @@ int partial_bswap2_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( bs_recv_image_ptr, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( bs_recv_image_ptr, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( bs_recv_image_ptr, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32 ( bs_recv_image_ptr, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2598,11 +2598,11 @@ int partial_bswap3_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( my_image, temp_image, my_image, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2632,11 +2632,11 @@ int partial_bswap3_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( my_image, temp_image, my_image, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2690,11 +2690,11 @@ int partial_bswap3_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32 ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2732,11 +2732,11 @@ int partial_bswap3_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32 ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2891,11 +2891,11 @@ int partial_bswap4_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( my_image, temp_image, my_image, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
 			#endif
 
 		}
@@ -2950,11 +2950,11 @@ int partial_bswap4_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32 ( temp_image, bs_blnd_image_ptr, bs_blnd_image_ptr, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -2991,11 +2991,11 @@ int partial_bswap4_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( my_image, temp_image, my_image, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( my_image, temp_image, my_image, bs_recv_image_size );
+				composite_alpha_rgba32 ( my_image, temp_image, my_image, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 
@@ -3035,11 +3035,11 @@ int partial_bswap4_rgba_BYTE ( unsigned int my_rank, unsigned int nnodes, \
 		if ( image_type == RGBA32 ) 
 		{
 			#ifdef _LUTBLEND
-				composite_alpha_rgba32 ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32_LUT ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#elif defined _BLENDF
 				composite_alpha_rgba32f ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#else
-				composite_alpha_rgba32_LUT ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
+				composite_alpha_rgba32 ( bs_blnd_image_ptr, temp_image, bs_blnd_image_ptr, bs_recv_image_size );
 			#endif
 		}
 		else if ( image_type == RGBA56 ) 

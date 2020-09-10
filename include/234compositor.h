@@ -48,6 +48,8 @@
    #define omp_get_thread_num() 0
 #endif
 
+// Alpha blending by using LUT
+#define _LUTBLEND 1
 
 // ======================================
 //		    TYPEDEF DECLARATIONS
@@ -310,7 +312,8 @@ unsigned int global_my_rank;
 unsigned int global_nnodes;
 
 // ========= ALPHA BLENDING LOOK UP TABLE ========= //
-BYTE LUT_Mult[ 256 * 256 ]; /**< Product Lookup Table: (255 - Alpha) * Color */ 
+BYTE LUT_Mult1[ 256 * 256 ]; /**< Product Lookup Table: (255 - Alpha) * Color */ 
+BYTE LUT_Mult2[ 256 * 256 ]; /**< Product Lookup Table: (255 - Alpha) * Color */ 
 BYTE LUT_Sat [ 512 ];       /**< Saturation Lookup Table: 255 if Color > 255 */ 
 //=====================================
 

@@ -131,12 +131,23 @@ struct RankDepth {
 int MyQSortComparator(const void* a , const void* b)
 {
 	struct RankDepth *x, *y;
+	float diff;
 
 	x = (struct RankDepth *)a;
 	y = (struct RankDepth *)b;
-
-	return ( x -> depth ) - ( y -> depth ); // Closest in Front
-//	return ( y -> depth ) - ( x -> depth ); // Closest at Back
+	
+	// Closest at Front
+	// diff = (float)( x -> depth ) - (float)( y -> depth ); 
+	// Closest at Back
+	diff = (float)( y -> depth ) - (float)( x -> depth ); 
+	
+	if ( diff > 0) {
+		return 1;
+	} else if ( diff < 0) {
+		return -1;
+	}
+	else return 0;
+	
 }
 
 int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
@@ -202,15 +213,21 @@ int  Do_234ZComposition ( unsigned int my_rank, unsigned int nnodes, \
 		}
 
 		#ifdef _234DEBUG
+		if (my_rank == ROOT_NODE ) 
+		{
 			for ( i = 0; i < nnodes; i++ )
-				printf ("[%d of %d] RANK[%d] DEPTH[%f] \n", my_rank, nnodes, BtoF_List[i].rank, BtoF_List[i].depth );
+				printf ("BEFORE [%d of %d] RANK[%d] DEPTH[%f] \n", my_rank, nnodes, BtoF_List[i].rank, BtoF_List[i].depth );
+		}
 		#endif
 
 		qsort( BtoF_List, nnodes, sizeof(struct RankDepth), MyQSortComparator );
 
 		#ifdef _234DEBUG
+		if (my_rank == ROOT_NODE ) 
+		{
 			for ( i = 0; i < nnodes; i++ )
-				printf ("[%d of %d] RANK[%d] DEPTH[%f] \n", my_rank, nnodes, BtoF_List[i].rank, BtoF_List[i].depth );
+				printf ("AFTER [%d of %d] RANK[%d] DEPTH[%f] \n", my_rank, nnodes, BtoF_List[i].rank, BtoF_List[i].depth );
+		}
 		#endif
 
 		i = 0;
