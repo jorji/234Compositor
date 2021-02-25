@@ -1,0 +1,61 @@
+##############################################################################
+#
+# 234Compositor - Image data merging library
+#
+# Copyright (c) 2018-2021 RIKEN Center for Computational Science (R-CCS)
+# Copyright (c) 2013-2017 RIKEN Advanced Institute for Computational Science (AICS)
+# All rights reserved.
+#
+##############################################################################
+
+# Cross Compile
+CC = mpifccpx
+
+# Native Compile
+# CC = mpifcc
+
+# MPI_GATHER Version
+CFLAGS	= -Kfast -std=c99 
+
+# MPI_GATHERV Version
+# CFLAGS = -Kfast -std=c99 -D_GATHERV
+
+# OpenMP
+OMPFLAGS = -Kopenmp
+
+LIBS = -lm
+
+# =======================
+INCLUDE_DIR = ./include
+SOURCE_DIR  = ./src
+LIB_DIR     = ./lib  
+# =======================
+
+OBJS_LIB = misc.o exchange.o merge.o 234compositor.o 
+	  
+AR      = ar
+RANLIB  = ranlib
+ARFLAG  = crsv
+LIBFILE = lib234comp.a 
+
+MKDIR   = mkdir -p
+RM      = rm -f
+MV	 = mv  	  
+
+$(LIBFILE): $(OBJS_LIB) 
+	$(AR) $(ARFLAG) $(LIBFILE) $(OBJS_LIB)
+	$(RANLIB) $(LIBFILE)
+	$(RM) $(OBJS_LIB) 
+	$(MKDIR) $(LIB_DIR)	
+	$(MV) $(LIBFILE) $(LIB_DIR)	
+	@echo "lib234comp.a created successfully."
+
+%.o: $(SOURCE_DIR)/%.c
+	$(CC) $(CFLAGS) $(OMPFLAGS) -I$(INCLUDE_DIR) -c $<
+
+all: $(LIBFILE)
+	$(RM) *.o
+
+clean:
+	$(RM) $(LIB_DIR)/$(LIBFILE) *.o *~ core
+
