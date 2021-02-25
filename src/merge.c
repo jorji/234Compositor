@@ -84,7 +84,7 @@
 
 	#if defined ( _OPENMP ) 
 		#pragma omp parallel for \
-			private( i, one_minus_alpha, one_alpha \
+			private( i, one_minus_alpha, one_alpha, \
 				 over_r,  over_g,  over_b,  over_a,   \
 				 under_r, under_g, under_b, under_a,  \
 				 blend_r, blend_g, blend_b, blend_a ) 
