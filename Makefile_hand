@@ -10,13 +10,13 @@
 CC = mpicc
 
 # MPI_GATHER Version
-CFLAGS	 = -O3 -std=gnu99 -Wall 
+CFLAGS	 = -O3 -std=gnu99
 
 # MPI_GATHERV Version
-#CFLAGS	 = -O3 -std=gnu99 -Wall -D _GATHERV
+#CFLAGS	 = -O3 -std=gnu99 -D _GATHERV
 
 # OpenMP (Activate this for enabling thread parallelization through OpenMP)
-# OMPFLAGS = -fopenmp
+OMPFLAGS = -fopenmp
 
 LIBS = -lm
 
@@ -53,3 +53,4 @@ all: $(LIBFILE)
 
 clean:
 	$(RM) *.o *~ core
+	cd $(LIB_DIR); $(RM) $(LIBFILE)
