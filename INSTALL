@@ -2,7 +2,8 @@
 /**
 * 234Compositor - Image data merging library
 *
-* Copyright (c) 2013-2015 Advanced Institute for Computational Science, RIKEN.
+* Copyright (c) 2018-2021 RIKEN Center for Computational Science (R-CCS)
+* Copyright (c) 2013-2017 RIKEN Advanced Institute for Computational Science (AICS)
 * All rights reserved.
 *
 **/
@@ -40,7 +41,7 @@ Configure options:
 
  --with-papi=PAPI_DIR or yes
     If you want to use the PAPI library, specify the directory where the library is installed.
-    In the case of compilation on K front-end, sprcifiy the directory. Use 'yes' for when you
+    In the case of compilation on K front-end, specifiy the directory. Use 'yes' for when you
     compile on compute nodes.
 
  CC=CC_COMPILER
@@ -51,7 +52,7 @@ Configure options:
 
 
 
-Here is examples.
+Here are some examples.
 
 # Using GNU compiler and openmpi, Specify install directory, MPI_GATHER version
 
@@ -73,7 +74,7 @@ $ ./configure CC=mpicc CFLAGS="-O3 -std=gnu99 -Wall -D _GATHERV -fopenmp"
   $ ./configure CC=mpicc CFLAGS="-O3 -openmp" --with-example=yes
 
 
-# FX, K computer, compilation on login nodes
+# FX, K computer (Cross-compilation on login nodes)
 
   $ ./configure --prefix=hogehoge \
                 --host=sparc64-unknown-linux-gnu \
@@ -81,7 +82,12 @@ $ ./configure CC=mpicc CFLAGS="-O3 -std=gnu99 -Wall -D _GATHERV -fopenmp"
                 CC=mpifccpx \
                 CFLAGS="-Kfast,parallel,openmp -Xg -std=c99 -Nrt_notune"
 
+# Fugaku supercomputer (Cross-compilation on login nodes)
+
+  $ ./configure --prefix=hogehoge \
+                --host=aarch64-unknown-linux-gnu \
+                --with-example=yes \
+                CC=mpifccpx \
+                CFLAGS="-Kfast,parallel,openmp -Xg -std=c99 -Nrt_notune"
 
 If you try to install process again, execute 'make distclean' then configure.
-
-
